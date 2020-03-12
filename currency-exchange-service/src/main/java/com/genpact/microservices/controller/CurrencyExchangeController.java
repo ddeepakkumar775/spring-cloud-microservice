@@ -31,9 +31,11 @@ public class CurrencyExchangeController {
 	 * 
 	 * return currencyExchangeRepository.findAllByFromAndTo(from, to); }
 	 */
-	
+
 	@GetMapping("currency-exchange/from/{from}/to/{to}")
 	public ExchangeValue retriveExchangeValue(@PathVariable("from") String from, @PathVariable("to") String to) {
-		return currencyExchangeRepository.findByFromAndTo(from, to);
+		ExchangeValue exchangeValue = currencyExchangeRepository.findByFromAndTo(from, to);
+		exchangeValue.setPort(Integer.parseInt(env.getProperty("local.server.port")));
+		return exchangeValue;
 	}
 }
