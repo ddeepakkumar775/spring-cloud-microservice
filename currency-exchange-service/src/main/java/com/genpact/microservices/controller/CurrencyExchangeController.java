@@ -3,6 +3,8 @@ package com.genpact.microservices.controller;
 import java.math.BigDecimal;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +16,8 @@ import com.genpact.microservices.repository.CurrencyExchangeRepository;
 
 @RestController
 public class CurrencyExchangeController {
+
+	private static Logger logger = LoggerFactory.getLogger(CurrencyExchangeController.class);
 
 	@Autowired
 	private Environment env;
@@ -36,6 +40,7 @@ public class CurrencyExchangeController {
 	public ExchangeValue retriveExchangeValue(@PathVariable("from") String from, @PathVariable("to") String to) {
 		ExchangeValue exchangeValue = currencyExchangeRepository.findByFromAndTo(from, to);
 		exchangeValue.setPort(Integer.parseInt(env.getProperty("local.server.port")));
+		logger.info("{}", exchangeValue);
 		return exchangeValue;
 	}
 }

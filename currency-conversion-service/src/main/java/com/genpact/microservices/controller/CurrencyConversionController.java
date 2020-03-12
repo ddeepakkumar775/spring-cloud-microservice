@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +19,8 @@ import com.genpact.microservices.model.CurrencyConversionBean;
 @RestController
 public class CurrencyConversionController {
 
+	private static Logger logger=LoggerFactory.getLogger(CurrencyConversionController.class);
+	
 	@Autowired
 	private Environment env;
 
@@ -34,7 +38,7 @@ public class CurrencyConversionController {
 		RestTemplate responseEntity = new RestTemplate();
 		CurrencyConversionBean forObject = responseEntity.getForObject(
 				"http://localhost:8000/currency-exchange/from/{from}/to/{to}", CurrencyConversionBean.class, map);
-
+		logger.info("{}",forObject);
 		/*
 		 * return new CurrencyConversionBean(1L, from, to, BigDecimal.valueOf(65),
 		 * BigDecimal.valueOf(65), BigDecimal.valueOf(65),
@@ -56,6 +60,7 @@ public class CurrencyConversionController {
 		map.put("to", to);
 
 		CurrencyConversionBean forObject = currencyExchangeServiceProxy.retriveExchagneValue(from, to);
+		logger.info("{}",forObject);
 
 		return new CurrencyConversionBean(1L, from, to, forObject.getConversionMultiple(), quantity,
 				forObject.getConversionMultiple().multiply(quantity), forObject.getPort());
